@@ -1,2 +1,4 @@
-# OpenWareLibraries
-Supporting code libraries for OpenWare firmware
+# Libraries
+Supporting code libraries for firmware
+
+. based on OpenWare toolchain
