@@ -64,3 +64,6 @@ build/
 *.z
 *.zip
 *.7z
+.old
+.old/
+
