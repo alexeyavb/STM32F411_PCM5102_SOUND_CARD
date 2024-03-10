@@ -1,0 +1,18 @@
+#define I2S_DATA_WORD_LENGTH    (24)                // industry-standard 24-bit I2S
+#define I2S_FRAME               (32)                // bits per sample
+#define READ_SIZE               (128)               // samples to read from I2S
+#define BUFFER_SIZE             (READ_SIZE*I2S_FRAME/16) // number of uint16_t elements expected
+#define WRITE_SIZE_BYTES        (BUFFER_SIZE*2)     // bytes to write
+
+#define I2S_SAMPLE_FREQUENCY    (16000)             // sample frequency
+
+uint16_t aud_buf[2*BUFFER_SIZE];            // Double buffering
+static volatile int16_t *BufPtr;
+
+void convert_endianness(uint32_t *array, uint16_t Size) {
+    for (int i = 0; i < Size; i++) {
+        array[i] = __REV(array[i]);
+    }
+}
+
+https://stackoverflow.com/questions/75251384/stm32-reading-i2s-to-record-a-wav-file-audio-choppy-what-is-causing-it

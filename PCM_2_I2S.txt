@@ -1,0 +1,37 @@
+I'm not sure about .Net, but it might look something like this in C++:
+
+Code: [Select]
+BYTE *outPCM24 = new BYTE[1440];
+
+int i2 = 0;
+for (int j2 = 0; j2 < orgPCMLength / 4; j2 ++)
+{
+    union {
+	int s4;
+	BYTE s1[4];
+    };
+    s4 = orgPCM[j2] * 8388608;
+    if (s4 < -8388608) s4 = -8388608;
+    else if (s4 > 8388607) s4 = 8388607;
+    outPCM24[i2] = s1[2];
+    outPCM24[i2 + 1] = s1[1];
+    outPCM24[i2 + 2] = s1[0];
+    i2 += 3;
+}
+
+Thanks, but not sure on how to translate this to C#. I can use some C++ code in C# under "unsafe" but it don't like the "union".
+
+ Logged
+Ian @ un4seen
+Administrator
+Posts: 25620
+
+Re: How to convert 24bit PCM to 16bit
+« Reply #15 on: 19 May '16 - 17:44 »
+Quote
+You can remove the "union" and use bit shifting instead:
+
+Code: [Select]
+    outPCM24[i2] = (s4>>16) & 0xff;
+    outPCM24[i2 + 1] = (s4>>8) & 0xff;
+    outPCM24[i2 + 2] = s4 & 0xff;

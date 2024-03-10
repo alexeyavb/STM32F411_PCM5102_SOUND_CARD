@@ -1,0 +1,14 @@
+подсказка: You've added another git repository inside your current repository.
+подсказка: Clones of the outer repository will not contain the contents of
+подсказка: the embedded repository and will not know how to obtain it.
+подсказка: If you meant to add a submodule, use:
+подсказка: 
+подсказка: 	git submodule add <url> Libraries/CherryUSB
+подсказка: 
+подсказка: If you added this path by mistake, you can remove it from the
+подсказка: index with:
+подсказка: 
+подсказка: 	git rm --cached Libraries/CherryUSB
+подсказка: 
+подсказка: See "git help submodule" for more information.
+

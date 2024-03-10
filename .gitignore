@@ -55,3 +55,12 @@ build
 ./build
 Build/
 build/
+*.tar
+*.tar.bz
+*.tar.bz2
+*.tar.gz
+*.tar.z
+*.ztar
+*.z
+*.zip
+*.7z
