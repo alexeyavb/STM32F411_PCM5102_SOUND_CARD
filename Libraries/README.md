@@ -1,4 +1,4 @@
 # Libraries
 Supporting code libraries for firmware
 
-. based on OpenWare toolchain
+*based on STM32 CMSIS HAL and OpenWare toolchain
