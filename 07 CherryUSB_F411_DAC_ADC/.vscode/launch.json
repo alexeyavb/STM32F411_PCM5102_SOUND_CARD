@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cortex Debug",
+            "cwd": "${workspaceRoot}",
+            "executable": "build/simple_mic.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stlink",
+            "runToEntryPoint": "main",
+            "preLaunchTask": "build",
+            "device": "STM32F411CE",
+            "svdFile": "/opt/ST/STM32CubeCLT/STMicroelectronics_CMSIS_SVD/STM32F411.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 16
+            },
+            "configFiles": [],
+            "showDevDebugOutput": "raw" ,
+},
+    ]
+}
