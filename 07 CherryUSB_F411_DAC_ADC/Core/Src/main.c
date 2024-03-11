@@ -18,20 +18,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "usbd_core.h"
-#include "usb_fsdev_reg.h"
+#include "cmsis_os.h"
+#include "crc.h"
+#include "dma.h"
+#include "i2s.h"
+#include "spi.h"
+#include "tim.h"
 #include "usb_otg.h"
 #include "gpio.h"
-#include "spi.h"
-#include "i2s.h"
-#include "dma.h"
-#include "tim.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-// TIM_HandleTypeDef    TimHandle;
-/* Prescaler declaration */
-// uint32_t uwPrescalerValue = 0;
-// static HAL_StatusTypeDef Timer_Init(void);
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,70 +56,17 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
+void MX_FREERTOS_Init(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
-extern int fputc(int ch, FILE *f);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define __HAL_RCC_USB_CLK_ENABLE(void) __HAL_RCC_USB_OTG_FS_CLK_ENABLE(void)
-UART_HandleTypeDef huart1;
-PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE END 0 */
 
-
-void pcd_gpio_init(void){
-/* 
-  USB_OTG_FS GPIO Configuration
-    PA11     ------> USB_OTG_FS_DM
-    PA12     ------> USB_OTG_FS_DP
-*/    
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-}
-
-
-static void MX_USART1_UART_Init(void)
-{
-  
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {  
-    Error_Handler();     
-  }
-}   
-
-
-void usb_dc_low_level_init(void)
-{   
-    #ifndef USB
-    #define USB ((USB_TypeDef *)g_usbdev_bus[0].reg_base)
-    #ifndef USB_BCDR_DPPU
-    #define USB_BCDR_DPPU                            ((uint16_t)0x8000U)           /*!< DP Pull-up Enable */
-    #endif
-    #endif
-
-    USB->BCDR |= (uint16_t)USB_BCDR_DPPU;
-
-    pcd_gpio_init();
-    __HAL_RCC_USB_CLK_ENABLE();
-    HAL_NVIC_SetPriority(OTG_FS_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
-}
 /**
   * @brief  The application entry point.
   * @retval int
@@ -148,47 +93,43 @@ int main(void)
   PeriphCommonClock_Config();
 
   /* USER CODE BEGIN SysInit */
-//  extern void BSP_AUDIO_OUT_ClockConfig(I2S_HandleTypeDef *hi2s, uint32_t AudioFreq, void *Params);
-//  BSP_AUDIO_OUT_ClockConfig(&hi2s2, 96000, (void*) 0x00U);
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //MX_USB_OTG_FS_PCD_Init();
-  /* USER CODE BEGIN 2 */
-  MX_USART1_UART_Init();
   MX_DMA_Init();
-  MX_SPI5_Init();
-  MX_I2S1_Init();
   MX_I2S2_Init();
-  // MX_I2S3_Init();
+  MX_CRC_Init();
+  MX_SPI5_Init();
+  MX_I2S3_Init();
   MX_TIM4_Init();
+  MX_USB_OTG_FS_PCD_Init();
 
-  extern void audio_v2_init(uint8_t busid, uint32_t reg_base);
-  extern void usbd_audio_open(uint8_t busid, uint8_t intf);
-  extern void usbd_audio_close(uint8_t busid, uint8_t intf);
-//  extern void audio_test(uint8_t busid);
-//  bool ep_tx_busy_flag, ep_rx_busy_flag; // Microphone, Speaker
-  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
-  SetPWM(44);
+  /* Initialize interrupts */
+  MX_NVIC_Init();
+  /* USER CODE BEGIN 2 */
 
-  AUDIO_MUTE_OFF();
-  audio_v2_init(0, USB_OTG_FS_PERIPH_BASE);
-  usbd_audio_open(0,(uint8_t)0U);
-
-  HAL_Delay(500);
-//  usbd_audio_close(0, (uint8_t)0U);
-  
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */      
+    /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
-
   /* USER CODE END 3 */
 }
 
@@ -214,9 +155,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 192;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLN = 384;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
+  RCC_OscInitStruct.PLL.PLLQ = 8;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -247,12 +188,41 @@ void PeriphCommonClock_Config(void)
 
   /** Initializes the peripherals clock
   */
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_TIM;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_TIM|RCC_PERIPHCLK_I2S;
+  PeriphClkInitStruct.PLLI2S.PLLI2SN = 424;
+  PeriphClkInitStruct.PLLI2S.PLLI2SM = 25;
+  PeriphClkInitStruct.PLLI2S.PLLI2SR = 3;
   PeriphClkInitStruct.TIMPresSelection = RCC_TIMPRES_ACTIVATED;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* PVD_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(PVD_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(PVD_IRQn);
+  /* FLASH_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(FLASH_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(FLASH_IRQn);
+  /* RCC_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(RCC_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(RCC_IRQn);
+  /* DMA1_Stream4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
+  /* SPI2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(SPI2_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(SPI2_IRQn);
+  /* FPU_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(FPU_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(FPU_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
@@ -261,7 +231,7 @@ void PeriphCommonClock_Config(void)
 
 /**
   * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM11 interrupt took place, inside
+  * @note   This function is called  when TIM1 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
   * a global variable "uwTick" used as application time base.
   * @param  htim : TIM handle
@@ -272,7 +242,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 0 */
 
   /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM11) {
+  if (htim->Instance == TIM1) {
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */

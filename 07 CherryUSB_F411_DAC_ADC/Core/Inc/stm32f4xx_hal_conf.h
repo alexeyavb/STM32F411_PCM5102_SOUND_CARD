@@ -37,10 +37,10 @@
   */
 #define HAL_MODULE_ENABLED
 
-/* #define HAL_CRYP_MODULE_ENABLED */
+  /* #define HAL_CRYP_MODULE_ENABLED */
 /* #define HAL_ADC_MODULE_ENABLED */
 /* #define HAL_CAN_MODULE_ENABLED */
-/* #define HAL_CRC_MODULE_ENABLED */
+#define HAL_CRC_MODULE_ENABLED
 /* #define HAL_CAN_LEGACY_MODULE_ENABLED */
 /* #define HAL_DAC_MODULE_ENABLED */
 /* #define HAL_DCMI_MODULE_ENABLED */
@@ -64,8 +64,8 @@
 /* #define HAL_MMC_MODULE_ENABLED */
 #define HAL_SPI_MODULE_ENABLED
 #define HAL_TIM_MODULE_ENABLED
-#define HAL_UART_MODULE_ENABLED
-#define HAL_USART_MODULE_ENABLED
+/* #define HAL_UART_MODULE_ENABLED */
+/* #define HAL_USART_MODULE_ENABLED */
 /* #define HAL_IRDA_MODULE_ENABLED */
 /* #define HAL_SMARTCARD_MODULE_ENABLED */
 /* #define HAL_SMBUS_MODULE_ENABLED */
@@ -137,7 +137,7 @@
   *        frequency, this source is inserted directly through I2S_CKIN pad.
   */
 #if !defined  (EXTERNAL_CLOCK_VALUE)
-  #define EXTERNAL_CLOCK_VALUE    12288000U /*!< Value of the External audio frequency in Hz*/
+  #define EXTERNAL_CLOCK_VALUE    24576000U /*!< Value of the External audio frequency in Hz*/
 #endif /* EXTERNAL_CLOCK_VALUE */
 
 /* Tip: To avoid modifying this file each time you need to use different HSE,
@@ -169,7 +169,7 @@
 #define  USE_HAL_I2C_REGISTER_CALLBACKS         0U /* I2C register callback disabled       */
 #define  USE_HAL_FMPI2C_REGISTER_CALLBACKS      0U /* FMPI2C register callback disabled    */
 #define  USE_HAL_FMPSMBUS_REGISTER_CALLBACKS    0U /* FMPSMBUS register callback disabled  */
-#define  USE_HAL_I2S_REGISTER_CALLBACKS         1U /* I2S register callback enabled       */
+#define  USE_HAL_I2S_REGISTER_CALLBACKS         0U /* I2S register callback disabled       */
 #define  USE_HAL_IRDA_REGISTER_CALLBACKS        0U /* IRDA register callback disabled      */
 #define  USE_HAL_LPTIM_REGISTER_CALLBACKS       0U /* LPTIM register callback disabled     */
 #define  USE_HAL_LTDC_REGISTER_CALLBACKS        0U /* LTDC register callback disabled      */
@@ -177,7 +177,7 @@
 #define  USE_HAL_NAND_REGISTER_CALLBACKS        0U /* NAND register callback disabled      */
 #define  USE_HAL_NOR_REGISTER_CALLBACKS         0U /* NOR register callback disabled       */
 #define  USE_HAL_PCCARD_REGISTER_CALLBACKS      0U /* PCCARD register callback disabled    */
-#define  USE_HAL_PCD_REGISTER_CALLBACKS         1U /* PCD register callback enabled       */
+#define  USE_HAL_PCD_REGISTER_CALLBACKS         0U /* PCD register callback disabled       */
 #define  USE_HAL_QSPI_REGISTER_CALLBACKS        0U /* QSPI register callback disabled      */
 #define  USE_HAL_RNG_REGISTER_CALLBACKS         0U /* RNG register callback disabled       */
 #define  USE_HAL_RTC_REGISTER_CALLBACKS         0U /* RTC register callback disabled       */

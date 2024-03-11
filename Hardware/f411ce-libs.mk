@@ -100,15 +100,15 @@ C_SRC_DSP += $(DSPLIB)/CommonTables/arm_const_structs.c
 # C_SRC += $(DSPLIB)/SupportFunctions/arm_q15_to_float.c
 
 ### FreeRTOS ###
-# C_SRC_OS  = $(OPENWARE)/Source/freertos.c
-# C_SRC_OS += $(FREERTOS_DIR)/CMSIS_RTOS/cmsis_os.c
-# C_SRC_OS += $(FREERTOS_DIR)/portable/GCC/ARM_CM4F/port.c
-# C_SRC_OS += $(FREERTOS_DIR)/tasks.c
-# C_SRC_OS += $(FREERTOS_DIR)/timers.c
-# C_SRC_OS += $(FREERTOS_DIR)/queue.c
-# C_SRC_OS += $(FREERTOS_DIR)/list.c
-# C_SRC_OS += $(FREERTOS_DIR)/croutine.c
-# C_SRC_OS += $(FREERTOS_DIR)/portable/MemMang/heap_4.c
+C_SRC_OS  = $(OPENWARE)/Source/freertos.c
+C_SRC_OS += $(FREERTOS_DIR)/CMSIS_RTOS/cmsis_os.c
+C_SRC_OS += $(FREERTOS_DIR)/portable/GCC/ARM_CM4F/port.c
+C_SRC_OS += $(FREERTOS_DIR)/tasks.c
+C_SRC_OS += $(FREERTOS_DIR)/timers.c
+C_SRC_OS += $(FREERTOS_DIR)/queue.c
+C_SRC_OS += $(FREERTOS_DIR)/list.c
+C_SRC_OS += $(FREERTOS_DIR)/croutine.c
+C_SRC_OS += $(FREERTOS_DIR)/portable/MemMang/heap_4.c
 
 # C_SRC_USBD_AUDIO = $(OPENWARE)/Source/usb_device.c
 # C_SRC_USBD_AUDIO += $(OPENWARE)/Source/usbd_conf.c

@@ -43,7 +43,7 @@ void MX_TIM4_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN Prototypes */
-void SetPWM(uint16_t value);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

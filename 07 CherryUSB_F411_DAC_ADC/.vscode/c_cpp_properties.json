@@ -15,7 +15,8 @@
                 "${workspaceFolder}/../Libraries/CherryUSB/osal/",
                 "${workspaceFolder}/../Libraries/CherryUSB/port/fsdev/",
                 "${workspaceFolder}/Core/Inc/",
-                "${workspaceFolder}/../Libraries/CherryUSB/class/audio"
+                "${workspaceFolder}/../Libraries/CherryUSB/class/audio",
+                "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
             ],
             "defines": [
                 "STM32F411xE",

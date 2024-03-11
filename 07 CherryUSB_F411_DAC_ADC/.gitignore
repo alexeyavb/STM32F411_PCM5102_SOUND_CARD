@@ -4,3 +4,5 @@ build/
 .elf
 .bin
 .lst
+.hex
+.lst

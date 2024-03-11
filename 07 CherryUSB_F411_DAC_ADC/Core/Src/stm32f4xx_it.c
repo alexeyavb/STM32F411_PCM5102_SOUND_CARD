@@ -55,16 +55,13 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
-
-extern DMA_HandleTypeDef hdma_spi1_tx;
 extern DMA_HandleTypeDef hdma_spi2_tx;
-
-extern I2S_HandleTypeDef hi2s1;
+extern DMA_HandleTypeDef hdma_spi3_rx;
 extern I2S_HandleTypeDef hi2s2;
-
+extern I2S_HandleTypeDef hi2s3;
+extern DMA_HandleTypeDef hdma_spi5_tx;
+extern SPI_HandleTypeDef hspi5;
 extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim11;
 
 /* USER CODE BEGIN EV */
 
@@ -149,19 +146,6 @@ void UsageFault_Handler(void)
 }
 
 /**
-  * @brief This function handles System service call via SWI instruction.
-  */
-void SVC_Handler(void)
-{
-  /* USER CODE BEGIN SVCall_IRQn 0 */
-
-  /* USER CODE END SVCall_IRQn 0 */
-  /* USER CODE BEGIN SVCall_IRQn 1 */
-
-  /* USER CODE END SVCall_IRQn 1 */
-}
-
-/**
   * @brief This function handles Debug monitor.
   */
 void DebugMon_Handler(void)
@@ -174,33 +158,6 @@ void DebugMon_Handler(void)
   /* USER CODE END DebugMonitor_IRQn 1 */
 }
 
-/**
-  * @brief This function handles Pendable request for system service.
-  */
-void PendSV_Handler(void)
-{
-  /* USER CODE BEGIN PendSV_IRQn 0 */
-
-  /* USER CODE END PendSV_IRQn 0 */
-  /* USER CODE BEGIN PendSV_IRQn 1 */
-
-  /* USER CODE END PendSV_IRQn 1 */
-}
-
-/**
-  * @brief This function handles System tick timer.
-  */
-void SysTick_Handler(void)
-{
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-
-  /* USER CODE END SysTick_IRQn 0 */
-
-  /* USER CODE BEGIN SysTick_IRQn 1 */
-
-  /* USER CODE END SysTick_IRQn 1 */
-}
-
 /******************************************************************************/
 /* STM32F4xx Peripheral Interrupt Handlers                                    */
 /* Add here the Interrupt Handlers for the used peripherals.                  */
@@ -209,46 +166,24 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM1 trigger and commutation interrupts and TIM11 global interrupt.
+  * @brief This function handles PVD interrupt through EXTI line 16.
   */
-void TIM1_TRG_COM_TIM11_IRQHandler(void)
+void PVD_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
+  /* USER CODE BEGIN PVD_IRQn 0 */
 
-  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim11);
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
+  /* USER CODE END PVD_IRQn 0 */
+  HAL_PWR_PVD_IRQHandler();
+  /* USER CODE BEGIN PVD_IRQn 1 */
 
-  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
+  /* USER CODE END PVD_IRQn 1 */
 }
-
-void DMA1_Stream4_IRQHandler(void)
-{  
-  /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
-
-  /* USER CODE END DMA1_Stream4_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_spi2_tx);
-  /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
-
-  /* USER CODE END DMA1_Stream4_IRQn 1 */
-} 
 
 /**
-  * @brief This function handles USB On The Go FS global interrupt.
+  * @brief This function handles Flash global interrupt.
   */
-void OTG_FS_IRQHandler(void)
-{
-  /* USER CODE BEGIN OTG_FS_IRQn 0 */
-
-  /* USER CODE END OTG_FS_IRQn 0 */
-  // HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
-  /* USER CODE BEGIN OTG_FS_IRQn 1 */
-  extern void USBD_IRQHandler(uint8_t busid);
-  USBD_IRQHandler((uint8_t)0);
-  /* USER CODE END OTG_FS_IRQn 1 */
-}
 void FLASH_IRQHandler(void)
-{  
+{
   /* USER CODE BEGIN FLASH_IRQn 0 */
 
   /* USER CODE END FLASH_IRQn 0 */
@@ -256,7 +191,104 @@ void FLASH_IRQHandler(void)
   /* USER CODE BEGIN FLASH_IRQn 1 */
 
   /* USER CODE END FLASH_IRQn 1 */
-} 
+}
+
+/**
+  * @brief This function handles RCC global interrupt.
+  */
+void RCC_IRQHandler(void)
+{
+  /* USER CODE BEGIN RCC_IRQn 0 */
+
+  /* USER CODE END RCC_IRQn 0 */
+  /* USER CODE BEGIN RCC_IRQn 1 */
+
+  /* USER CODE END RCC_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream2 global interrupt.
+  */
+void DMA1_Stream2_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream2_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream2_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi3_rx);
+  /* USER CODE BEGIN DMA1_Stream2_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream4 global interrupt.
+  */
+void DMA1_Stream4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi2_tx);
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
+  */
+void TIM1_UP_TIM10_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles SPI2 global interrupt.
+  */
+void SPI2_IRQHandler(void)
+{
+  /* USER CODE BEGIN SPI2_IRQn 0 */
+
+  /* USER CODE END SPI2_IRQn 0 */
+  HAL_I2S_IRQHandler(&hi2s2);
+  /* USER CODE BEGIN SPI2_IRQn 1 */
+
+  /* USER CODE END SPI2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles SPI3 global interrupt.
+  */
+void SPI3_IRQHandler(void)
+{
+  /* USER CODE BEGIN SPI3_IRQn 0 */
+
+  /* USER CODE END SPI3_IRQn 0 */
+  HAL_I2S_IRQHandler(&hi2s3);
+  /* USER CODE BEGIN SPI3_IRQn 1 */
+
+  /* USER CODE END SPI3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA2 stream4 global interrupt.
+  */
+void DMA2_Stream4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream4_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi5_tx);
+  /* USER CODE BEGIN DMA2_Stream4_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream4_IRQn 1 */
+}
 
 /**
   * @brief This function handles FPU global interrupt.
@@ -271,53 +303,19 @@ void FPU_IRQHandler(void)
   /* USER CODE END FPU_IRQn 1 */
 }
 
-// void TIM1_UP_TIM10_IRQHandler(void)
-// {
-//   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
-  
-//   /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
-//   HAL_TIM_IRQHandler(&htim11);
-//   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
-  
-//   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
-// } 
 /**
-  * @brief This function handles SPI1 global interrupt.
+  * @brief This function handles SPI5 global interrupt.
   */
-void SPI1_IRQHandler(void)
+void SPI5_IRQHandler(void)
 {
-  /* USER CODE BEGIN SPI1_IRQn 0 */
-  
-  /* USER CODE END SPI1_IRQn 0 */   
-  HAL_I2S_IRQHandler(&hi2s1);
-  /* USER CODE BEGIN SPI1_IRQn 1 */
-  
-  /* USER CODE END SPI1_IRQn 1 */
-}  
-void SPI2_IRQHandler(void)
-{
-  /* USER CODE BEGIN SPI2_IRQn 0 */
-  
-  /* USER CODE END SPI2_IRQn 0 */
-  HAL_I2S_IRQHandler(&hi2s2);
-  /* USER CODE BEGIN SPI2_IRQn 1 */
-  
-  /* USER CODE END SPI2_IRQn 1 */
-}  
-   
-/**
-  * @brief This function handles DMA2 stream2 global interrupt.
-  */
-void DMA2_Stream2_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
-  
-  /* USER CODE END DMA2_Stream2_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_spi1_tx);
-  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
-  
-  /* USER CODE END DMA2_Stream2_IRQn 1 */
-}  
+  /* USER CODE BEGIN SPI5_IRQn 0 */
+
+  /* USER CODE END SPI5_IRQn 0 */
+  HAL_SPI_IRQHandler(&hspi5);
+  /* USER CODE BEGIN SPI5_IRQn 1 */
+
+  /* USER CODE END SPI5_IRQn 1 */
+}
 
 /* USER CODE BEGIN 1 */
 

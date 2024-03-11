@@ -28,13 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include <stdbool.h>
-#ifdef DEBUG
-#include <stdio.h>
-#endif
-#ifndef UNUSED
-#define UNUSED( x ) (void)(x)
-#endif
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -63,6 +57,22 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define ONBOARD_LED_PIN_Pin GPIO_PIN_13
+#define ONBOARD_LED_PIN_GPIO_Port GPIOC
+#define USER_KEY_Pin GPIO_PIN_0
+#define USER_KEY_GPIO_Port GPIOA
+#define I2S2_MUTE_CTRL_Pin GPIO_PIN_2
+#define I2S2_MUTE_CTRL_GPIO_Port GPIOB
+#define LCD_SPI5_CS2_PIN_Pin GPIO_PIN_4
+#define LCD_SPI5_CS2_PIN_GPIO_Port GPIOB
+#define LCD_LED_LEVEL_Pin GPIO_PIN_6
+#define LCD_LED_LEVEL_GPIO_Port GPIOB
+#define LCD_SPI5_RST_PIN_Pin GPIO_PIN_7
+#define LCD_SPI5_RST_PIN_GPIO_Port GPIOB
+#define LCD_SPI5_RS_PIN_Pin GPIO_PIN_8
+#define LCD_SPI5_RS_PIN_GPIO_Port GPIOB
+#define LCD_SPI5_CS_PIN_Pin GPIO_PIN_9
+#define LCD_SPI5_CS_PIN_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

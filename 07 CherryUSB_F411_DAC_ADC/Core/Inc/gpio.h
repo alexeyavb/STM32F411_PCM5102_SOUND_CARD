@@ -34,21 +34,6 @@ extern "C" {
 
 /* USER CODE BEGIN Private defines */
 
-#define I2S2_MUTE_CTRL_Pin                                      GPIO_PIN_2
-#define I2S2_MUTE_CTRL_GPIO_Port                                GPIOB
-#define AUDIO_MUTE_PORT_ENABLE()                    		        __HAL_RCC_GPIOB_CLK_ENABLE()
-#define AUDIO_MUTE_ON()                                         HAL_GPIO_WritePin(I2S2_MUTE_CTRL_GPIO_Port, I2S2_MUTE_CTRL_Pin, GPIO_PIN_RESET)
-#define AUDIO_MUTE_OFF()                                        HAL_GPIO_WritePin(I2S2_MUTE_CTRL_GPIO_Port, I2S2_MUTE_CTRL_Pin, GPIO_PIN_SET)
-
-// #define LCD_SPI5_RS_PIN_Pin GPIO_PIN_6
-#define LCD_SPI5_RST_PIN_Pin GPIO_PIN_7
-#define LCD_SPI5_RST_PIN_GPIO_Port GPIOB
-#define LCD_SPI5_RS_PIN_Pin GPIO_PIN_8
-#define LCD_SPI5_RS_PIN_GPIO_Port GPIOB
-#define LCD_SPI5_CS_PIN_Pin GPIO_PIN_9
-#define LCD_SPI5_CS_PIN_GPIO_Port GPIOB
-#define LCD_LED_LEVEL_Pin GPIO_PIN_6
-#define LCD_LED_LEVEL_GPIO_Port GPIOB
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);

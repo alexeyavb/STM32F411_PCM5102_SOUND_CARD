@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
-#include "gpio.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -141,15 +141,5 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void SetPWM(uint16_t value){
-     TIM_OC_InitTypeDef sConfigOC;
-    HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
-    sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = value;
-    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-    HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1); // таймер №4, канал №1
-    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
-}
 
 /* USER CODE END 1 */
