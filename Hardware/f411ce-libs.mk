@@ -1,24 +1,30 @@
 # object files
 
-C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_cortex.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_gpio.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_rcc.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_dma.c
+C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_pwr.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_adc.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_tim.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_spi.c
+C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_exti.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_flash.c
+C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_flash_ramfunc.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_adc_ex.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_dma_ex.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_pwr_ex.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_rcc_ex.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_flash_ex.c
 C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_tim_ex.c
+C_SRC += $(DRIVERS)/Src/stm32f4xx_hal_cortex.c
+
+
 
 # optionals
 C_SRC_UART = $(DRIVERS)/Src/stm32f4xx_hal_uart.c
 C_SRC_UART += $(DRIVERS)/Src/stm32f4xx_hal_usart.c
+
 # dac
 C_SRC_DAC = $(DRIVERS)/Src/stm32f4xx_hal_dac.c
 C_SRC_DAC += $(DRIVERS)/Src/stm32f4xx_hal_dac_ex.c
@@ -100,15 +106,18 @@ C_SRC_DSP += $(DSPLIB)/CommonTables/arm_const_structs.c
 # C_SRC += $(DSPLIB)/SupportFunctions/arm_q15_to_float.c
 
 ### FreeRTOS ###
-C_SRC_OS  = $(OPENWARE)/Source/freertos.c
-C_SRC_OS += $(FREERTOS_DIR)/CMSIS_RTOS/cmsis_os.c
+# C_SRC_OS  = $(OPENWARE)/Source/freertos.c
+# C_SRC_OS += $(FREERTOS_DIR)/CMSIS_RTOS/cmsis_os.c
+C_SRC_OS = $(FREERTOS_DIR)/CMSIS_RTOS_V2/cmsis_os2.c
+C_SRC_OS += $(FREERTOS_DIR)/portable/MemMang/heap_4.c
 C_SRC_OS += $(FREERTOS_DIR)/portable/GCC/ARM_CM4F/port.c
+C_SRC_OS += $(FREERTOS_DIR)/croutine.c
+C_SRC_OS += $(FREERTOS_DIR)/event_groups.c
+C_SRC_OS += $(FREERTOS_DIR)/list.c
+C_SRC_OS += $(FREERTOS_DIR)/queue.c
 C_SRC_OS += $(FREERTOS_DIR)/tasks.c
 C_SRC_OS += $(FREERTOS_DIR)/timers.c
-C_SRC_OS += $(FREERTOS_DIR)/queue.c
-C_SRC_OS += $(FREERTOS_DIR)/list.c
-C_SRC_OS += $(FREERTOS_DIR)/croutine.c
-C_SRC_OS += $(FREERTOS_DIR)/portable/MemMang/heap_4.c
+C_SRC_OS += $(FREERTOS_DIR)/stream_buffer.c
 
 # C_SRC_USBD_AUDIO = $(OPENWARE)/Source/usb_device.c
 # C_SRC_USBD_AUDIO += $(OPENWARE)/Source/usbd_conf.c
@@ -126,9 +135,10 @@ C_SRC_LNOSYS += $(SYSCALLS_DIR)/libnosys_write.c
 
 # CHERRY USB
 
+
 C_SRC_CHRY_USB_CORE = $(CHERRY)/core/usbd_core.c
-C_SRC_CHRY_USB_OSAL = $(CHERRY)/osal/usb_osal_rtems.c
-# C_SRC_CHRY_USB_OSAL += $(CHERRY)/osal/usb_osal_freertos.c
+# C_SRC_CHRY_USB_OSAL = $(CHERRY)/osal/usb_osal_rtems.c
+C_SRC_CHRY_USB_OSAL += $(CHERRY)/osal/usb_osal_freertos.c
 # C_SRC_CHRY_USB_OSAL += $(CHERRY)/osal/usb_osal_rtthread.c
 # C_SRC_CHRY_USB_OSAL += $(CHERRY)/osal/usb_osal_yoc.c
 

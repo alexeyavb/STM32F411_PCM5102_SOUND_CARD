@@ -1,0 +1,54 @@
+{
+    "configurations": [
+        {
+            "name": "STM32",
+            "compilerPath": "/opt/ST/STM32CubeCLT/GNU-tools-for-STM32/bin/arm-none-eabi-gcc",
+            "includePath": [
+                "${workspaceFolder}/../Libraries/Drivers/STM32F4xx_HAL_Driver/Inc/",
+                "${workspaceFolder}/../Libraries/Drivers/CMSIS/Include/",
+                "${workspaceFolder}/../Libraries/Drivers/CMSIS/Device/ST/STM32F4xx/Include/",
+                "${workspaceFolder}/../Libraries/Middlewares/Third_Party/FreeRTOS/Source/Include/",
+                "${workspaceFolder}/../Libraries/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/",
+                "${workspaceFolder}/../Libraries/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F",
+                "${workspaceFolder}/../Libraries/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F",
+                "${workspaceFolder}/../Libraries/CherryUSB/class/",
+                "${workspaceFolder}/../Libraries/CherryUSB/common/",
+                "${workspaceFolder}/../Libraries/CherryUSB/core/",
+                "${workspaceFolder}/../Libraries/CherryUSB/osal/",
+                "${workspaceFolder}/../Libraries/CherryUSB/port/fsdev/",
+                "${workspaceFolder}/Core/Inc/",
+                "${workspaceFolder}/../Libraries/CherryUSB/class/audio",
+                "${workspaceFolder}/Drivers/Inc",
+                "${workspaceFolder}/Bsp/Inc"
+            ],
+            "defines": [
+                "STM32F411xE",
+                "USE_HAL_DRIVER",
+                "USE_MATH_FF",
+                "USE_USB_FS",
+                "USE_FULL_ASSERT",
+                "DEBUG"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "${workspaceFolder}/../Libraries/CherryUSB/class/**",
+                    "${workspaceFolder}/../Libraries/CherryUSB/common/**",
+                    "${workspaceFolder}/../Libraries/CherryUSB/core/**",
+                    "${workspaceFolder}/../Libraries/CherryUSB/osal/**",
+                    "${workspaceFolder}/../Libraries/CherryUSB/port/fsdev/**",
+                    "${workspaceFolder}/../Libraries/Drivers/CMSIS/**",
+                    "${workspaceFolder}/../Libraries/Drivers/STM32F4xx_HAL_Driver/**",
+                    "${workspaceFolder}/../Libraries/Middlewares/Third_Party/FreeRTOS/**",
+                    "${workspaceFolder}/../Libraries/syscalls/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}
