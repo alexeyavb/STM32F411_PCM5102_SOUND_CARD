@@ -2,14 +2,18 @@
 #include <cmsis_os2.h>
 #include "i2s.h"
 #include "i2s_ex.h"
-// @brief This worked direct transmission
+// @brief This worked direct w/o buffer transmission
 // #define MIN_SAMPLES_FOR 16U
 // #define RX_BUFFER_SZ ((MIN_SAMPLES_FOR*sizeof(uint16_t)*256U)+2U)
-// @brief This worked direct transmission
-#define MIN_SAMPLES_FOR 4U
-#define RX_BUFFER_SZ ((MIN_SAMPLES_FOR*sizeof(uint16_t)*256U)+2U)
 
-static uint16_t tmpBuffer[RX_BUFFER_SZ];
+
+// Nominal buffer sz for bufferized transmission
+#define MIN_SAMPLES_FOR 2U
+#define RX_BUFFER_SZ ((MIN_SAMPLES_FOR*sizeof(uint16_t)))
+
+static uint16_t rxBuffer[RX_BUFFER_SZ];
+// @brief read transmission buffer
+uint16_t tmpBuffer[RX_BUFFER_SZ];
 /**
  * @brief additional func for I2SPR set
 */
@@ -113,27 +117,49 @@ void I2S_BUS_ClockConfig(I2S_HandleTypeDef *hi2s, uint32_t AudioFreq, void *Para
   }
 }
 
-void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s) {
+void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s) {  
+
     if(hi2s->Instance == SPI3){
-        uint16_t rxBuffer[RX_BUFFER_SZ];
-        memcpy(rxBuffer, tmpBuffer, RX_BUFFER_SZ);
+
+        uint32_t int_left, int_right;
+        float float_left, float_right;
+
+        for(uint16_t i=0;i<RX_BUFFER_SZ;i+=4){
+            {
+                int_left = (int32_t)(
+                    ((uint32_t)rxBuffer[i] << 8) | (uint16_t)(rxBuffer[i+1] >> 8)
+                );
+                if(int_left & (1<<23)){ int_left|=0xFF000000;}; float_left = (int32_t) int_left;
+                // float_left *= 2; // ((int32_t)float_left) >>1;
+                int_left = (int32_t)(float_left);
+                
+                tmpBuffer[i] = (uint32_t)int_left>>8;
+                tmpBuffer[i+1] = (uint16_t)int_left>>8;            
+            }
+            {
+                int_right = (int32_t)(
+                    ((uint32_t)rxBuffer[i+2] << 8) | ((uint16_t)rxBuffer[i+3] >> 8)
+                );
+                if(int_right & (1<<23)) {int_right|=0xFF000000;}; float_right = (int32_t) int_right;
+                // float_right *= 2; // ((int32_t)float_right)>>1;
+                int_right = (int32_t)(float_right);
+                
+                tmpBuffer[i+2] = (uint32_t)int_right>>8;
+                tmpBuffer[i+3] = (uint16_t)int_right>>8;
+            }
+        }
         // HAL_I2S_Transmit_DMA(&hi2s2, tmpBuffer, RX_BUFFER_SZ);
         HAL_I2S_Transmit_DMA(&hi2s2, tmpBuffer, RX_BUFFER_SZ);
     }
 }
 
-// void HAL_I2S_RxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
-//     if(hi2s->Instance == SPI3){
-//         memcpy(rxBuffer, tmpBuffer, RX_BUFFER_SZ/2);
-//         HAL_I2S_Transmit_DMA(&hi2s2, rxBuffer, RX_BUFFER_SZ/2);
-//     }
-// }
-
 void StartRezerved3Task(void *argument){
-    AUDIO_MUTE_OFF();
-    // extern osStatust osDelay(int delay);
+    AUDIO_MUTE_OFF();    
+    ////
+    // @brief Direct data moving
     // HAL_I2S_Receive_DMA(&hi2s3, tmpBuffer, RX_BUFFER_SZ);
-    HAL_I2S_Receive_DMA(&hi2s3, tmpBuffer, RX_BUFFER_SZ);
+    // @brief over read buffer
+    HAL_I2S_Receive_DMA(&hi2s3, rxBuffer, RX_BUFFER_SZ);
     for(;;)
     {    
         osDelay(1);
