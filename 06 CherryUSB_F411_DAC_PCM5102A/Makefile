@@ -28,7 +28,7 @@ include $(OPENWARE)/Hardware/sources.mk
 
 C_SRC += $(C_SRC_I2S)
 C_SRC += $(C_SRC_DSP)
-C_SRC += $(C_SRC_OS)
+# C_SRC += $(C_SRC_OS)
 C_SRC += $(C_SRC_UART)
 C_SRC += $(C_SRC_USBD)
 C_SRC += $(C_SRC_CHRY_USB_CORE)

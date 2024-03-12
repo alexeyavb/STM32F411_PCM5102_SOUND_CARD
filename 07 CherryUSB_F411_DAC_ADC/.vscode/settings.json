@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.h": "c",
-        "*.c": "c",
-        "*.c.dis": "c",
-        "*.h.dis": "c",
-    },
-    "cmake.configureOnOpen": false
-}
